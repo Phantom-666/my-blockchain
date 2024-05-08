@@ -1,7 +1,7 @@
 import { InfoCircledIcon } from "@radix-ui/react-icons"
 import { Callout, Container, Flex, Spinner } from "@radix-ui/themes"
 import axios from "axios"
-import { useEffect, useState } from "react"
+import { Fragment, useEffect, useState } from "react"
 
 export default function Home({ publicKey }: { publicKey: string }) {
   const [balance, setBalance] = useState<string | null>(null)
@@ -18,8 +18,6 @@ export default function Home({ publicKey }: { publicKey: string }) {
     axios
       .post("/api/get_transactions", { address: publicKey })
       .then((res) => {
-        console.log(res.data.transactions)
-
         setTransactions(res.data.transactions)
       })
       .catch((err) => console.log(err))
@@ -45,8 +43,8 @@ export default function Home({ publicKey }: { publicKey: string }) {
         <h1>Transactions</h1>
 
         <Flex direction="column" gap="3">
-          {transactions.map((t) => (
-            <>
+          {transactions.map((t, i) => (
+            <Fragment key={i}>
               {t.to === publicKey ? (
                 <>
                   <Callout.Root color="green">
@@ -72,7 +70,7 @@ export default function Home({ publicKey }: { publicKey: string }) {
                   </Callout.Root>
                 </>
               )}
-            </>
+            </Fragment>
           ))}
         </Flex>
       </Container>

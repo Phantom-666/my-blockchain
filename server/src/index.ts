@@ -1,10 +1,29 @@
 import { Blockchain } from "./Blockchain"
 import { Transaction } from "./Data"
-
-//TODO: client
+import express from "express"
+import "dotenv/config"
+import routes from "./routes"
+import cors from "cors"
 
 import EC from "elliptic"
 const ec = new EC.ec("secp256k1")
+
+const PORT = process.env.PORT || 5000
+
+const runServer = () => {
+  const app = express()
+
+  app.use(cors())
+
+  app.use(express.json())
+  app.use("/api", routes)
+
+  app.listen(PORT, () => {
+    console.log(`Server listening on port ${PORT}`)
+  })
+}
+
+runServer()
 
 const run = () => {
   //client
@@ -34,4 +53,4 @@ const run = () => {
   console.log("Balance", myBlockchain.getBalance(myWalletAddress))
 }
 
-run()
+// run()

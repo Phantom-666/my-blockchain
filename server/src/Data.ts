@@ -26,6 +26,10 @@ class Transaction {
     this.signature = sig.toDER("hex")
   }
 
+  signTransactionWithSignature(signature: string) {
+    this.signature = signature
+  }
+
   isValid() {
     if (this.from === null) return true
 

@@ -8,7 +8,9 @@ class Blockchain {
 
   private difficulty = 2
 
-  constructor() {}
+  constructor() {
+    console.log("Blockchain created")
+  }
 
   private createGenesisBlock() {
     const block = new Block(Date.now(), [], "0")
@@ -18,7 +20,7 @@ class Blockchain {
     return block
   }
 
-  private getLatestBlock() {
+  public getLatestBlock() {
     return this.chain[this.chain.length - 1]
   }
 
@@ -54,16 +56,36 @@ class Blockchain {
     for (const block of this.chain) {
       for (const trans of block.getTransaction()) {
         if (trans.from === address) {
-          balance -= trans.amount
+          balance -= Number(trans.amount)
         }
 
         if (trans.to === address) {
-          balance += trans.amount
+          balance += Number(trans.amount)
         }
       }
     }
 
     return balance
+  }
+
+  public getPendingTransactionsLength() {
+    return this.pendingTransactions.length
+  }
+  public getMiningReward() {
+    return this.miningReward
+  }
+
+  getTransactions(address: string) {
+    const result = []
+    for (const block of this.chain) {
+      for (const trans of block.getTransaction()) {
+        if (trans.from === address || trans.to === address) {
+          result.push(trans)
+        }
+      }
+    }
+
+    return result
   }
 
   public isChainValid() {
